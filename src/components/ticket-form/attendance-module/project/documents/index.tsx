@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 
@@ -11,6 +11,9 @@ export function Documents() {
     proposal: undefined,
     report: undefined,
   });
+
+  const proposalInputRef = useRef<HTMLInputElement>(null);
+  const reportInputRef = useRef<HTMLInputElement>(null);
 
   function handleUploadFile(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -30,6 +33,12 @@ export function Documents() {
       ...prevFiles,
       [document]: undefined,
     }));
+
+    if (document === "proposal" && proposalInputRef.current) {
+      proposalInputRef.current.value = "";
+    } else if (document === "report" && reportInputRef.current) {
+      reportInputRef.current.value = "";
+    }
   }
 
   return (
@@ -38,10 +47,12 @@ export function Documents() {
       <div className="flex gap-4">
         <Input
           type="file"
+          ref={proposalInputRef}
           onChange={(event) => handleUploadFile(event, "proposal")}
         />
         <Input
           type="file"
+          ref={reportInputRef}
           onChange={(event) => handleUploadFile(event, "report")}
         />
       </div>

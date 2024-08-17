@@ -53,9 +53,10 @@ export function Project() {
       </Select>
 
       <Separator />
-
       <Documents />
+      <Separator />
       <Payment />
+      <Separator />
       <RegularizedArea />
     </fieldset>
   );
