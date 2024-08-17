@@ -1,3 +1,5 @@
+import { useFormContext } from "react-hook-form";
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,10 +11,12 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 export function GeneralInfo() {
+  const { register } = useFormContext();
+
   return (
     <fieldset className="space-y-4">
       <Input placeholder="Responsável do atendimento" />
-      <Input placeholder="Título do atendimento" />
+      <Input placeholder="Título do atendimento" {...register("title")} />
       <Textarea placeholder="Descrição" className="resize-none" />
       <Select>
         <SelectTrigger>
