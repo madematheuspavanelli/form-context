@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 
+import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -14,26 +15,39 @@ import { InternalAnalysis } from "./internal-analysis";
 import { Project } from "./project";
 
 export function AttendanceModule() {
-  const [module, setModule] = useState("");
+  const { control } = useFormContext();
+  const actionType = useWatch({ control, name: "actionType" });
 
   return (
     <div className="space-y-4">
-      <Select value={module} onValueChange={setModule}>
-        <SelectTrigger>
-          <SelectValue placeholder="Módulo do Atendimento" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="guidance">Orientação</SelectItem>
-          <SelectItem value="internal-analysis">Análise Interna</SelectItem>
-          <SelectItem value="project">Projeto</SelectItem>
-        </SelectContent>
-      </Select>
+      <FormField
+        name="actionType"
+        control={control}
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Módulo do Atendimento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="guidance">Orientação</SelectItem>
+                  <SelectItem value="internal_analysis">
+                    Análise Interna
+                  </SelectItem>
+                  <SelectItem value="consultancy">Projeto</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+          </FormItem>
+        )}
+      />
 
       <Separator />
 
-      {module === "guidance" && <Guidance />}
-      {module === "internal-analysis" && <InternalAnalysis />}
-      {module === "project" && <Project />}
+      {actionType === "guidance" && <Guidance />}
+      {actionType === "internal_analysis" && <InternalAnalysis />}
+      {actionType === "consultancy" && <Project />}
     </div>
   );
 }

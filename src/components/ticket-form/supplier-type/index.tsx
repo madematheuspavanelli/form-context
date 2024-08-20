@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { Form, useFormContext, useWatch } from "react-hook-form";
 
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -12,34 +18,57 @@ import { Direct } from "./direct";
 import { Indirect } from "./indirect";
 
 export function SupplierType() {
-  const [type, setType] = useState("");
+  const { control } = useFormContext();
+  const supplierType = useWatch({ name: "supplierDetails.type" });
 
   return (
     <fieldset className="space-y-4">
-      <legend className="mb-4 text-xl font-semibold">Tipo Fornecedor</legend>
-      <Select value={type} onValueChange={setType}>
-        <SelectTrigger>
-          <SelectValue placeholder="Selecione" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="direto">Direto</SelectItem>
-          <SelectItem value="indireto">Indireto</SelectItem>
-        </SelectContent>
-      </Select>
+      <legend className="text-xl font-semibold">Tipo Fornecedor</legend>
+      <FormField
+        name="supplierDetails.type"
+        control={control}
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Direto">Direto</SelectItem>
+                  <SelectItem value="Indireto">Indireto</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-      {type === "direto" && <Direct />}
-      {type === "indireto" && <Indirect />}
+      {supplierType === "Direto" && <Direct />}
+      {supplierType === "Indireto" && <Indirect />}
 
-      <Select>
-        <SelectTrigger>
-          <SelectValue placeholder="Motivo do atendimento" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="cadastro">CADASTRO NOVO</SelectItem>
-          <SelectItem value="prodes">PRODES</SelectItem>
-          <SelectItem value="sem-car">SEM CAR</SelectItem>
-        </SelectContent>
-      </Select>
+      <FormField
+        name="reason_id"
+        control={control}
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Motivo do atendimento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cadastro">CADASTRO NOVO</SelectItem>
+                  <SelectItem value="prodes">PRODES</SelectItem>
+                  <SelectItem value="sem-car">SEM CAR</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </fieldset>
   );
 }
